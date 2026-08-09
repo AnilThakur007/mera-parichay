@@ -1,0 +1,2546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
+    <title>Mera Parichay – Forge your business card</title>
+    <meta name="description" content="Build a professional business card that adapts to your profession, then share it as an image, print it, or save as a contact file – no app required." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,600;14..32,700&family=Playfair+Display:ital,wght@0,600;1,500&family=Space+Grotesk:wght@500;600;700&family=Bebas+Neue&family=Oswald:wght@500;600;700&family=Cormorant+Garamond:ital,wght@0,600;1,500&family=EB+Garamond:ital,wght@0,500;0,600;1,500&display=swap" rel="stylesheet" />
+    <style>
+        /* ─── Reset & Variables ─── */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+        }
+        :root {
+            --bg: #FAF6EE;
+            --surface: #FFFFFF;
+            --ink: #171B2E;
+            --ink-soft: #6B6E7E;
+            --border: #E6E0D3;
+            --line: #DDD5C4;
+            --navy: #1A2A4A;
+            --navy-deep: #101a30;
+            --gold: #C99A3E;
+            --gold-light: #F0DBA0;
+            --accent: #C85A4A;
+            --accent-light: #F3DCD6;
+            --radius: 18px;
+            --radius-sm: 11px;
+            --shadow: 0 24px 60px -28px rgba(23, 27, 46, 0.28);
+            --shadow-sm: 0 10px 24px -14px rgba(23, 27, 46, 0.18);
+            --touch: 44px;
+            --font-display: 'Playfair Display', serif;
+            --font-head: 'Space Grotesk', sans-serif;
+            --font-body: 'Inter', sans-serif;
+        }
+        html { scroll-behavior: smooth; }
+        body {
+            background: var(--bg);
+            color: var(--ink);
+            font-family: var(--font-body);
+            -webkit-font-smoothing: antialiased;
+            padding: 28px 16px 48px;
+            background-image:
+                radial-gradient(circle at 8% 6%, rgba(201, 154, 62, 0.07) 0%, transparent 42%),
+                radial-gradient(circle at 96% 30%, rgba(200, 90, 74, 0.05) 0%, transparent 45%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        @media (min-width: 640px) {
+            body { padding: 48px 32px 90px; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.001ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.001ms !important;
+                scroll-behavior: auto !important;
+            }
+        }
+
+        .wrap {
+            max-width: 1180px;
+            margin: 0 auto;
+        }
+
+        /* ─── Header ─── */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .logo-group {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+        }
+        .logo-svg-wrap {
+            flex: none;
+            width: 46px;
+            height: 46px;
+        }
+        .logo-svg-wrap svg {
+            display: block;
+            width: 100%;
+            height: 100%;
+            border-radius: 11px;
+            box-shadow: 0 3px 14px rgba(23, 27, 46, 0.14);
+            transition: transform 0.35s cubic-bezier(.2,.7,.2,1);
+        }
+        .logo-svg-wrap svg:hover {
+            transform: rotate(-3deg) scale(1.04);
+        }
+        .brand-text {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.15;
+        }
+        .brand-name {
+            font-family: var(--font-display);
+            font-weight: 600;
+            font-size: 19px;
+            font-style: italic;
+            color: var(--navy);
+            letter-spacing: -0.01em;
+        }
+        .brand-tagline {
+            font-family: var(--font-head);
+            font-size: 9.5px;
+            color: var(--ink-soft);
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-top: 2px;
+            opacity: 0.75;
+        }
+        .pro-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: var(--navy);
+            color: var(--gold-light);
+            font-family: var(--font-head);
+            font-weight: 600;
+            font-size: 10.5px;
+            padding: 5px 12px 5px 10px;
+            border-radius: 999px;
+            letter-spacing: 0.05em;
+            white-space: nowrap;
+        }
+        .pro-badge svg { width: 11px; height: 11px; flex: none; }
+
+        .btn {
+            font-family: var(--font-body);
+            font-weight: 600;
+            border: none;
+            background: var(--surface);
+            padding: 9px 18px;
+            border-radius: 999px;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(.2,.7,.2,1);
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            min-height: var(--touch);
+            touch-action: manipulation;
+            border: 1.5px solid var(--border);
+            color: var(--ink);
+            font-size: 13.5px;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        .btn svg { width: 15px; height: 15px; flex: none; }
+        .btn-primary {
+            background: var(--navy);
+            color: #fff;
+            border-color: var(--navy);
+        }
+        .btn-primary:hover {
+            background: var(--navy-deep);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 24px -8px rgba(26, 42, 74, 0.45);
+        }
+        .btn-outline {
+            background: transparent;
+        }
+        .btn-outline:hover {
+            background: var(--surface);
+            border-color: var(--navy);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-sm);
+        }
+        .btn:not(.btn-primary):not(.btn-outline):hover {
+            border-color: var(--navy);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-sm);
+        }
+        .btn-sm {
+            padding: 7px 15px;
+            font-size: 12.5px;
+            min-height: 36px;
+        }
+        .btn-equal {
+            min-width: 88px;
+            justify-content: center;
+        }
+
+        /* ─── Hero ─── */
+        .hero {
+            position: relative;
+            padding: 30px 0 34px;
+            margin-bottom: 6px;
+        }
+        .hero-eyebrow {
+            font-family: var(--font-head);
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 16px;
+        }
+        .hero h1 {
+            font-family: var(--font-display);
+            font-style: italic;
+            font-weight: 600;
+            font-size: clamp(30px, 4.4vw, 46px);
+            line-height: 1.08;
+            letter-spacing: -0.01em;
+            color: var(--navy);
+            max-width: 15ch;
+            margin: 0 0 16px;
+        }
+        .hero p {
+            font-size: 15.5px;
+            line-height: 1.65;
+            color: var(--ink-soft);
+            max-width: 52ch;
+            margin: 0;
+        }
+        .hero-postmark {
+            position: absolute;
+            top: 14px;
+            right: 4px;
+            width: 92px;
+            height: 92px;
+            animation: spin 46s linear infinite;
+        }
+        @media (max-width: 900px) { .hero-postmark { display: none; } }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .section-divider {
+            border: none;
+            border-top: 1px dashed var(--line);
+            margin: 30px 0 34px;
+            opacity: 0.9;
+        }
+
+        /* ─── Grid ─── */
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 30px;
+        }
+        @media (min-width: 860px) {
+            .grid {
+                grid-template-columns: minmax(0,1fr) minmax(0,1fr);
+                gap: 56px;
+                align-items: start;
+            }
+        }
+
+        /* ─── Editor ─── */
+        .card-editor {
+            background: transparent;
+            padding: 0;
+            border-radius: 0;
+            box-shadow: none;
+            border: none;
+        }
+        .card-editor h2 {
+            font-family: var(--font-display);
+            font-style: italic;
+            font-size: 21px;
+            margin-bottom: 18px;
+            font-weight: 600;
+            color: var(--navy);
+            display: block;
+        }
+        .card-editor h2::after { content: none; }
+
+        .field-group {
+            margin-bottom: 15px;
+        }
+        .field-group label {
+            display: block;
+            font-family: var(--font-head);
+            font-size: 10.5px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.09em;
+            color: var(--ink-soft);
+            margin-bottom: 6px;
+        }
+        .field-group input,
+        .field-group select {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1.5px solid var(--border);
+            border-radius: var(--radius-sm);
+            font-size: 14.5px;
+            font-family: var(--font-body);
+            background: var(--surface);
+            transition: 0.15s ease;
+            min-height: var(--touch);
+            outline: none;
+            color: var(--ink);
+        }
+        .field-group input::placeholder { color: #ADA898; }
+        .field-group input:focus,
+        .field-group select:focus {
+            border-color: var(--navy);
+            box-shadow: 0 0 0 3.5px rgba(26, 42, 74, 0.1);
+        }
+        .field-group input.error {
+            border-color: var(--accent);
+            background: #FFF4F2;
+        }
+        .field-group input.error:focus {
+            box-shadow: 0 0 0 3.5px rgba(200, 90, 74, 0.14);
+        }
+        .field-group .error-msg {
+            font-size: 11.5px;
+            color: var(--accent);
+            margin-top: 5px;
+            display: none;
+            font-weight: 500;
+        }
+        .field-group .error-msg.show {
+            display: block;
+        }
+
+        .row-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+        @media (max-width: 480px) {
+            .row-2 { grid-template-columns: 1fr; }
+        }
+
+        /* ─── Accordion ─── */
+        .accordion {
+            margin-top: 6px;
+            border-top: 1px dashed var(--line);
+            padding-top: 4px;
+        }
+        .accordion-item {
+            border-bottom: 1px dashed var(--line);
+            overflow: hidden;
+        }
+        .accordion-item:last-child { border-bottom: none; }
+        .accordion-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 2px;
+            cursor: pointer;
+            user-select: none;
+            transition: opacity 0.15s;
+            font-family: var(--font-head);
+            font-weight: 600;
+            font-size: 12px;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--ink);
+        }
+        .accordion-header:hover { opacity: 0.65; }
+        .accordion-header .label-group {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+        }
+        .accordion-header .label-group svg {
+            width: 16px; height: 16px; color: var(--accent); flex: none;
+        }
+        .accordion-header .chevron {
+            transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+            color: var(--ink-soft);
+            display: inline-flex;
+        }
+        .accordion-header .chevron svg { width: 15px; height: 15px; }
+        .accordion-item.open .accordion-header .chevron { transform: rotate(180deg); }
+        .accordion-item.open .accordion-header { color: var(--navy); }
+        .accordion-body {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), padding 0.3s ease;
+            padding: 0 2px;
+        }
+        .accordion-item.open .accordion-body {
+            max-height: 640px;
+            padding: 2px 2px 20px;
+        }
+        .accordion-body .hint {
+            font-size: 12px;
+            color: var(--ink-soft);
+            margin: 6px 0 12px;
+            line-height: 1.5;
+        }
+        .accordion-body .hint strong { color: var(--ink); font-weight: 600; }
+
+        .variant-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 7px;
+            margin-top: 8px;
+        }
+        .variant-pill {
+            font-family: var(--font-body);
+            padding: 7px 15px;
+            border-radius: 999px;
+            background: var(--surface);
+            border: 1.5px solid var(--border);
+            font-size: 12.5px;
+            font-weight: 500;
+            color: var(--ink-soft);
+            cursor: pointer;
+            transition: 0.15s ease;
+            min-height: 34px;
+            touch-action: manipulation;
+        }
+        .variant-pill:hover { border-color: var(--navy); color: var(--ink); }
+        .variant-pill.active {
+            background: var(--navy);
+            color: #fff;
+            border-color: var(--navy);
+            font-weight: 600;
+        }
+
+        .swatch-row {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            flex-wrap: wrap;
+            margin: 4px 0 10px;
+        }
+        .swatch {
+            width: 27px;
+            height: 27px;
+            border-radius: 50%;
+            border: 2px solid var(--surface);
+            outline: 1.5px solid var(--border);
+            outline-offset: 1px;
+            cursor: pointer;
+            transition: 0.15s ease;
+            touch-action: manipulation;
+            padding: 0;
+        }
+        .swatch:hover { transform: scale(1.14); }
+        .swatch.active {
+            outline-color: var(--navy);
+            outline-width: 2px;
+            transform: scale(1.14);
+        }
+        .swatch-custom {
+            width: 27px;
+            height: 27px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 2px solid var(--surface);
+            outline: 1.5px solid var(--border);
+            outline-offset: 1px;
+            cursor: pointer;
+            background: conic-gradient(red, yellow, lime, blue, magenta, red);
+            touch-action: manipulation;
+            transition: 0.15s ease;
+        }
+        .swatch-custom:hover { transform: scale(1.14); }
+        .swatch-custom input[type="color"] {
+            width: 200%;
+            height: 200%;
+            margin: -25%;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+        }
+        #colorReset {
+            font-family: var(--font-body);
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--ink-soft);
+            background: none;
+            border: none;
+            padding: 0;
+            min-height: auto;
+            text-decoration: underline;
+            text-underline-offset: 3px;
+            cursor: pointer;
+        }
+        #colorReset:hover { color: var(--accent); }
+
+        .upload-area {
+            margin-top: 4px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .upload-btn {
+            background: var(--surface);
+            padding: 9px 16px;
+            border-radius: 999px;
+            border: 1.5px dashed var(--line);
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 13px;
+            transition: 0.15s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+        }
+        .upload-btn svg { width: 15px; height: 15px; color: var(--accent); }
+        .upload-btn:hover {
+            border-color: var(--accent);
+            background: var(--accent-light);
+        }
+        .upload-thumb {
+            width: 38px;
+            height: 38px;
+            border-radius: 8px;
+            object-fit: cover;
+            border: 1.5px solid var(--border);
+        }
+        .toggle-row {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-top: 12px;
+            flex-wrap: wrap;
+        }
+        .toggle-row label { font-size: 12.5px; color: var(--ink); display: flex; align-items: center; gap: 6px; }
+        .toggle-row input[type="checkbox"] { accent-color: var(--navy); width: 15px; height: 15px; }
+        .toggle-row input[type="range"] {
+            flex: 1;
+            min-width: 70px;
+            accent-color: var(--navy);
+        }
+
+        .wm-controls {
+            display: flex;
+            gap: 22px;
+            flex-wrap: wrap;
+            margin-top: 14px;
+        }
+        .wm-controls > div {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .wm-controls span {
+            font-family: var(--font-head);
+            font-size: 10.5px;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            color: var(--ink-soft);
+        }
+        .wm-controls input[type="range"] {
+            width: 110px;
+            accent-color: var(--navy);
+        }
+        #f-watermark {
+            width: 100%;
+            padding: 11px 13px;
+            border: 1.5px solid var(--border);
+            border-radius: var(--radius-sm);
+            font-size: 13.5px;
+            font-family: var(--font-body);
+            background: var(--surface);
+            min-height: var(--touch);
+            outline: none;
+            transition: 0.15s ease;
+        }
+        #f-watermark:focus {
+            border-color: var(--navy);
+            box-shadow: 0 0 0 3.5px rgba(26, 42, 74, 0.1);
+        }
+        .char-count {
+            font-family: var(--font-head);
+            text-align: right;
+            font-size: 10.5px;
+            color: var(--ink-soft);
+            margin-top: 5px;
+        }
+        .char-count.warn { color: var(--accent); }
+
+        .pro-upsell {
+            margin-top: 26px;
+            padding: 18px 20px;
+            background: var(--navy);
+            border-radius: var(--radius);
+            border: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 14px;
+            position: relative;
+            overflow: hidden;
+        }
+        .pro-upsell::before {
+            content: '';
+            position: absolute;
+            top: -40%;
+            right: -8%;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(201,154,62,0.35), transparent 70%);
+            pointer-events: none;
+        }
+        .pro-upsell p {
+            font-size: 13.5px;
+            color: #D9DEEC;
+            margin: 0;
+            line-height: 1.5;
+            position: relative;
+            z-index: 1;
+        }
+        .pro-upsell strong {
+            color: var(--gold-light);
+            font-family: var(--font-head);
+            font-weight: 600;
+        }
+        .pro-upsell .btn-primary {
+            background: var(--gold);
+            border-color: var(--gold);
+            color: var(--navy-deep);
+            position: relative;
+            z-index: 1;
+        }
+        .pro-upsell .btn-primary:hover {
+            background: var(--gold-light);
+            border-color: var(--gold-light);
+            box-shadow: 0 10px 24px -8px rgba(201, 154, 62, 0.5);
+        }
+
+        /* ─── Preview ─── */
+        .preview-col { position: relative; }
+        @media (min-width: 860px) {
+            .preview-col { position: sticky; top: 24px; }
+        }
+        .preview-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 14px;
+        }
+        .preview-head h2 {
+            font-family: var(--font-display);
+            font-style: italic;
+            font-size: 21px;
+            font-weight: 600;
+            color: var(--navy);
+        }
+        #btnRandomize {
+            background: var(--surface);
+        }
+
+        .stage {
+            background: var(--surface);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 26px 22px 22px;
+            border: 1.5px dashed var(--line);
+            position: relative;
+        }
+        @media (min-width: 480px) {
+            .stage { padding: 30px 26px 26px; }
+        }
+
+        .scissors-print {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            font-family: var(--font-head);
+            font-size: 10px;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--ink-soft);
+            margin-bottom: 16px;
+        }
+        .scissors-print svg {
+            width: 14px;
+            height: 14px;
+            stroke: var(--ink-soft);
+            fill: none;
+            stroke-width: 1.8;
+        }
+
+        .card-flip {
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.65s cubic-bezier(0.4, 0.2, 0.2, 1);
+            cursor: pointer;
+            max-width: 380px;
+            margin: 0 auto;
+        }
+        .card-flip.flipped { transform: rotateY(180deg); }
+
+        .card {
+            position: relative;
+            overflow: hidden;
+            border-radius: 14px;
+            background: var(--c-bg);
+            color: var(--c-ink);
+            font-family: var(--c-body);
+            box-shadow: 0 16px 40px -18px rgba(23, 27, 46, 0.35);
+            border: var(--c-border, 1px solid #EEE);
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+            width: 100%;
+        }
+        .card-back {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+            border-radius: 14px;
+            background: var(--c-bg);
+            backface-visibility: hidden;
+            transform: rotateY(180deg);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 20px;
+            border: var(--c-border, 1px solid #EEE);
+            box-shadow: 0 16px 40px -18px rgba(23, 27, 46, 0.35);
+        }
+        .card-back-qr {
+            background: #fff;
+            border-radius: 10px;
+            padding: 8px;
+            line-height: 0;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+        }
+        .card-back-qr canvas {
+            display: block;
+            width: 92px;
+            height: 92px;
+        }
+        .card-back-name {
+            font-family: var(--c-display);
+            font-weight: 600;
+            font-size: 15px;
+            text-align: center;
+        }
+        .card-back-label {
+            font-family: var(--c-label-font, var(--c-body));
+            font-size: 9.5px;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--c-accent);
+        }
+
+        .ink-wipe {
+            position: absolute;
+            top: 0;
+            left: -30%;
+            width: 160%;
+            height: 100%;
+            z-index: 4;
+            transform: translateX(-105%) skewX(-10deg);
+            pointer-events: none;
+            background: var(--c-accent);
+            opacity: 0.5;
+            transition: transform 0.7s cubic-bezier(0.76, 0, 0.24, 1);
+        }
+        .card-top {
+            height: var(--c-topbar-h, 0);
+            background: var(--c-topbar, transparent);
+        }
+        .card-inner {
+            padding: 18px 16px 16px;
+            position: relative;
+            background: var(--c-surface, transparent);
+        }
+        @media (min-width: 480px) {
+            .card-inner { padding: 22px 20px 20px; }
+        }
+
+        .card-motif {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            opacity: var(--c-motif-opacity, 0.12);
+            color: var(--c-accent2, var(--c-accent));
+            width: 100%;
+            height: 100%;
+        }
+        .card-head {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            position: relative;
+            z-index: 1;
+        }
+        .avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: var(--c-avatar-radius, 12px);
+            background: var(--c-accent2, var(--c-accent));
+            color: var(--c-avatar-ink, #fff);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--c-display);
+            font-weight: 600;
+            font-size: 17px;
+            overflow: hidden;
+            flex: none;
+            transition: background 0.2s;
+        }
+        .avatar.has-image { background: transparent !important; }
+        .avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .card-name {
+            font-family: var(--c-display);
+            font-weight: 600;
+            font-size: 18px;
+            line-height: 1.2;
+        }
+        .card-role {
+            font-family: var(--c-label-font, var(--c-body));
+            font-weight: 600;
+            font-size: 10.5px;
+            letter-spacing: var(--c-tracking, 0.12em);
+            text-transform: uppercase;
+            color: var(--c-accent);
+            margin-top: 2px;
+        }
+        .card-tagline {
+            margin: 14px 0 14px;
+            padding-left: 11px;
+            border-left: 2px solid var(--c-accent);
+            font-style: italic;
+            font-size: 13px;
+            line-height: 1.5;
+            color: var(--c-ink-soft);
+            position: relative;
+            z-index: 1;
+        }
+        .card-details {
+            display: grid;
+            gap: 8px;
+            position: relative;
+            z-index: 1;
+        }
+        .card-details .row {
+            display: grid;
+            grid-template-columns: 54px 1fr;
+            gap: 6px;
+            font-size: 12px;
+        }
+        .card-details .k {
+            font-family: var(--c-label-font, 'Inter', sans-serif);
+            font-weight: 600;
+            font-size: 8.5px;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--c-accent);
+            padding-top: 1px;
+        }
+        .watermark-layer {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            color: var(--c-ink);
+            overflow: hidden;
+            opacity: 0.14;
+        }
+
+        .flip-hint {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 16px;
+            font-family: var(--font-body);
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--ink-soft);
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 6px 0;
+        }
+        .flip-hint svg { width: 14px; height: 14px; }
+        .flip-hint:hover { color: var(--accent); }
+
+        .actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 9px;
+            margin-top: 22px;
+        }
+        .actions .btn {
+            flex: 1 0 auto;
+            justify-content: center;
+            font-size: 13px;
+            padding: 10px 14px;
+        }
+        .actions .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .toast {
+            margin-top: 12px;
+            padding: 10px 14px;
+            background: var(--accent-light);
+            color: #9C4232;
+            border-radius: 10px;
+            display: none;
+            font-size: 12.5px;
+            font-weight: 500;
+            white-space: pre-line;
+        }
+        .toast.show {
+            display: block;
+            animation: toastIn 0.3s ease;
+        }
+        @keyframes toastIn {
+            0% { opacity: 0; transform: translateY(-8px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        .stamp-fx {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 84px;
+            height: 84px;
+            margin: -42px 0 0 -42px;
+            z-index: 6;
+            pointer-events: none;
+            opacity: 0;
+            color: var(--c-accent, var(--accent));
+        }
+        .stamp-fx.firing {
+            animation: stamp 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+        }
+        @keyframes stamp {
+            0% { opacity: 0; transform: scale(2) rotate(-20deg); }
+            40% { opacity: 1; transform: scale(0.9) rotate(-4deg); }
+            70% { opacity: 1; transform: scale(1.05) rotate(-6deg); }
+            100% { opacity: 0; transform: scale(1) rotate(-5deg); }
+        }
+
+        footer {
+            margin-top: 56px;
+            text-align: center;
+            font-family: var(--font-head);
+            font-size: 10.5px;
+            letter-spacing: 0.08em;
+            color: var(--ink-soft);
+            border-top: 1px dashed var(--line);
+            padding-top: 22px;
+            opacity: 0.65;
+        }
+
+        /* ─── 3D DICE ─── */
+        .dice-wrap {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            perspective: 400px;
+            flex: none;
+        }
+        .dice-cube {
+            width: 26px;
+            height: 26px;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+            border-radius: 5px;
+        }
+        .dice-cube.rolling {
+            animation: diceRoll3d 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+        }
+        @keyframes diceRoll3d {
+            0% { transform: rotateX(0deg) rotateY(0deg) scale(1); }
+            15% { transform: rotateX(420deg) rotateY(180deg) scale(1.25); }
+            35% { transform: rotateX(840deg) rotateY(360deg) scale(0.85); }
+            55% { transform: rotateX(1260deg) rotateY(540deg) scale(1.2); }
+            75% { transform: rotateX(1680deg) rotateY(720deg) scale(0.9); }
+            90% { transform: rotateX(1920deg) rotateY(900deg) scale(1.05); }
+            100% { transform: rotateX(2160deg) rotateY(1080deg) scale(1); }
+        }
+        .face {
+            position: absolute;
+            width: 26px;
+            height: 26px;
+            border-radius: 5px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(3, 1fr);
+            padding: 4px;
+            box-sizing: border-box;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+        }
+        .face .dot {
+            width: 4.5px;
+            height: 4.5px;
+            border-radius: 50%;
+            background: var(--navy);
+            place-self: center;
+        }
+        .face-front { transform: translateZ(13px); }
+        .face-back { transform: rotateY(180deg) translateZ(13px); }
+        .face-right { transform: rotateY(90deg) translateZ(13px); }
+        .face-left { transform: rotateY(-90deg) translateZ(13px); }
+        .face-top { transform: rotateX(90deg) translateZ(13px); }
+        .face-bottom { transform: rotateX(-90deg) translateZ(13px); }
+
+        .face .dot:nth-child(1) { grid-column: 1; grid-row: 1; }
+        .face .dot:nth-child(2) { grid-column: 3; grid-row: 1; }
+        .face .dot:nth-child(3) { grid-column: 1; grid-row: 3; }
+        .face .dot:nth-child(4) { grid-column: 3; grid-row: 3; }
+        .face .dot:nth-child(5) { grid-column: 2; grid-row: 2; }
+        .face .dot:nth-child(6) { grid-column: 1; grid-row: 2; }
+        .face .dot:nth-child(7) { grid-column: 3; grid-row: 2; }
+        .face .dot:nth-child(8) { grid-column: 2; grid-row: 1; }
+        .face .dot:nth-child(9) { grid-column: 2; grid-row: 3; }
+
+        /* ─── PRO MODAL ─── */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(16, 26, 48, 0.55);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 20px;
+        }
+        .modal-overlay.active {
+            display: flex;
+            animation: modalFade 0.3s ease;
+        }
+        @keyframes modalFade {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+        .modal-box {
+            background: var(--navy);
+            border-radius: 26px;
+            max-width: 430px;
+            width: 100%;
+            padding: 40px 32px 32px;
+            text-align: center;
+            box-shadow: 0 32px 80px rgba(10, 15, 30, 0.5);
+            position: relative;
+            overflow: hidden;
+            animation: modalPop 0.4s cubic-bezier(.2,.8,.2,1);
+            color: #fff;
+        }
+        @keyframes modalPop {
+            0% { opacity: 0; transform: scale(0.94) translateY(8px); }
+            100% { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        .modal-box::before {
+            content: '';
+            position: absolute;
+            top: -30%;
+            right: -20%;
+            width: 260px;
+            height: 260px;
+            background: radial-gradient(circle, rgba(201,154,62,0.4), transparent 70%);
+            pointer-events: none;
+        }
+        .modal-box::after { content: none; }
+        .modal-emoji-big {
+            width: 52px;
+            height: 52px;
+            margin: 0 auto 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(201, 154, 62, 0.16);
+            border-radius: 50%;
+            color: var(--gold-light);
+            position: relative;
+            z-index: 1;
+        }
+        .modal-emoji-big svg { width: 24px; height: 24px; }
+        .modal-title {
+            font-family: var(--font-display);
+            font-style: italic;
+            font-size: 27px;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+        }
+        .modal-title span { color: var(--gold-light); }
+        .modal-sub {
+            font-size: 14px;
+            color: #B9C0D6;
+            margin-bottom: 24px;
+            line-height: 1.6;
+            position: relative;
+            z-index: 1;
+        }
+        .modal-sub strong { color: var(--gold-light); font-weight: 600; }
+        .modal-features {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 11px;
+            text-align: left;
+            font-size: 12.5px;
+            color: #D9DEEC;
+            margin-bottom: 26px;
+            padding: 0 2px;
+            position: relative;
+            z-index: 1;
+        }
+        .modal-features span {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+        }
+        .modal-features span svg {
+            width: 13px; height: 13px; flex: none; color: var(--gold);
+        }
+        .modal-close-btn {
+            background: var(--gold);
+            color: var(--navy-deep);
+            border: none;
+            padding: 12px 34px;
+            border-radius: 999px;
+            font-family: var(--font-body);
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            transition: 0.2s ease;
+            position: relative;
+            z-index: 1;
+        }
+        .modal-close-btn:hover {
+            background: var(--gold-light);
+            transform: scale(1.03);
+            box-shadow: 0 10px 26px -6px rgba(201, 154, 62, 0.55);
+        }
+        .modal-sparkle {
+            position: absolute;
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: var(--gold-light);
+            animation: sparkle 2s ease-in-out infinite;
+            z-index: 1;
+        }
+        .modal-sparkle:nth-child(1) { top: 14%; left: 9%; animation-delay: 0s; }
+        .modal-sparkle:nth-child(2) { top: 22%; right: 11%; animation-delay: 0.65s; width: 4px; height: 4px; }
+        .modal-sparkle:nth-child(3) { bottom: 20%; left: 15%; animation-delay: 1.3s; width: 4px; height: 4px; }
+        @keyframes sparkle {
+            0%, 100% { opacity: 0; transform: scale(0.5); }
+            50% { opacity: 1; transform: scale(1.15); }
+        }
+        .modal-confetti { position: absolute; pointer-events: none; }
+        .modal-foot-note {
+            margin-top: 16px;
+            font-size: 11.5px;
+            color: #7C86A3;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ─── Print Styles ─── */
+        @media print {
+            body { background: #fff; padding: 0; margin: 0; }
+            .header, .hero, footer, .actions, .flip-hint, .toast, .pro-upsell,
+            .accordion, .upload-area, .card-editor, .preview-head, .modal-overlay,
+            .section-divider {
+                display: none !important;
+            }
+            .wrap { max-width: 100%; padding: 0; margin: 0; }
+            .grid { display: block; margin: 0; }
+            .preview-col { position: static; margin: 0; }
+            .stage {
+                border: none; padding: 0; background: none; box-shadow: none;
+                display: flex; flex-direction: column; align-items: center; justify-content: center;
+                min-height: 100vh; margin: 0;
+            }
+            .card {
+                width: 3.5in !important; height: 2in !important;
+                max-width: 3.5in !important; max-height: 2in !important;
+                border: 2px dashed #999 !important; box-shadow: none !important;
+                margin: 0 auto !important; border-radius: 0 !important;
+                -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important;
+                transform: none !important; overflow: hidden;
+            }
+            .card-back { display: none; }
+            .card-flip { transform: none !important; max-width: 3.5in !important; margin: 0 auto; }
+            .ink-wipe, .stamp-fx { display: none; }
+            .scissors-print {
+                display: flex !important; align-items: center; gap: 6px; font-size: 10px;
+                color: #999; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.1em;
+            }
+            .scissors-print svg { width: 18px; height: 18px; stroke: #999; }
+        }
+
+        @media (max-width: 480px) {
+            .logo-svg-wrap { width: 40px; height: 40px; }
+            .brand-name { font-size: 17px; }
+            .brand-tagline { font-size: 9px; }
+            .header .btn { font-size: 11px; padding: 7px 13px; min-height: 34px; }
+            .btn-equal { min-width: 68px; }
+            .pro-badge { font-size: 9.5px; padding: 4px 10px; }
+            .hero { padding: 22px 0 26px; }
+            .dice-wrap { width: 28px; height: 28px; }
+            .dice-cube { width: 22px; height: 22px; }
+            .face { width: 22px; height: 22px; padding: 3px; }
+            .face .dot { width: 3.5px; height: 3.5px; }
+            .face-front { transform: translateZ(11px); }
+            .face-back { transform: rotateY(180deg) translateZ(11px); }
+            .face-right { transform: rotateY(90deg) translateZ(11px); }
+            .face-left { transform: rotateY(-90deg) translateZ(11px); }
+            .face-top { transform: rotateX(90deg) translateZ(11px); }
+            .face-bottom { transform: rotateX(-90deg) translateZ(11px); }
+            .modal-box { padding: 32px 22px 26px; }
+            .modal-features { grid-template-columns: 1fr; }
+        }
+    </style>
+    </style>
+</head>
+<body>
+    <div class="wrap">
+
+        <!-- ─── HEADER ─── -->
+        <header class="header">
+            <div class="logo-group">
+                <div class="logo-svg-wrap" aria-label="Mera Parichay logo">
+                    <svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" role="img">
+                        <defs>
+                            <linearGradient id="navyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#1A2A4A"/>
+                                <stop offset="100%" stop-color="#2C3E6B"/>
+                            </linearGradient>
+                            <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#D4A84A"/>
+                                <stop offset="100%" stop-color="#F7D97E"/>
+                            </linearGradient>
+                        </defs>
+                        <rect x="60" y="60" width="280" height="280" rx="24" fill="#FFFFFF" stroke="#D4A84A" stroke-width="3"/>
+                        <rect x="60" y="60" width="280" height="280" rx="24" fill="none" stroke="rgba(26,42,74,0.08)" stroke-width="1"/>
+                        <rect x="120" y="110" width="40" height="180" rx="4" fill="url(#navyGrad)" transform="rotate(-10, 140, 200)"/>
+                        <rect x="240" y="110" width="40" height="180" rx="4" fill="url(#goldGrad)" transform="rotate(10, 260, 200)"/>
+                        <rect x="175" y="100" width="50" height="30" rx="6" fill="url(#goldGrad)" transform="rotate(0, 200, 115)"/>
+                        <circle cx="200" cy="300" r="8" fill="#1A2A4A"/>
+                    </svg>
+                </div>
+                <div class="brand-text">
+                    <span class="brand-name">Mera Parichay</span>
+                    <span class="brand-tagline">Where Your Cards Tell Your Story.</span>
+                </div>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+                <span class="pro-badge"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l7.1-1.01L12 2z"/></svg>Pro</span>
+                <button class="btn btn-outline btn-sm btn-equal" id="btnTryPro">Try free</button>
+            </div>
+        </header>
+
+        <!-- ─── HERO ─── -->
+        <section class="hero">
+            <svg class="hero-postmark" viewBox="0 0 120 120" aria-hidden="true">
+                <defs><path id="ring" d="M 60,60 m -46,0 a 46,46 0 1,1 92,0 a 46,46 0 1,1 -92,0"/></defs>
+                <circle cx="60" cy="60" r="46" fill="none" stroke="#C99A3E" stroke-width="1.3" stroke-dasharray="2 4" opacity="0.55"/>
+                <circle cx="60" cy="60" r="34" fill="none" stroke="#C99A3E" stroke-width="1.1" opacity="0.4"/>
+                <text font-family="'Space Grotesk', sans-serif" font-size="8.4" letter-spacing="3" fill="#C99A3E" opacity="0.8">
+                    <textPath href="#ring" startOffset="0%">READY TO SEND • READY TO SEND • </textPath>
+                </text>
+                <path d="M46 62 L60 50 L74 62 M60 50 L60 74" stroke="#C99A3E" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="0.85"/>
+            </svg>
+            <p class="hero-eyebrow">Mera Parichay</p>
+            <h1>Share your business card, not a link.</h1>
+            <p>Fill in your details once. The card restyles itself for your profession — then shares straight to WhatsApp, email, or anywhere else, as a photo. Nothing to click, nothing to open.</p>
+        </section>
+        <hr class="section-divider">
+
+        <!-- ─── MAIN GRID ─── -->
+        <div class="grid">
+
+            <!-- Editor -->
+            <section class="card-editor">
+                <h2>Your details</h2>
+
+                <div class="field-group">
+                    <label>Full name *</label>
+                    <input id="f-name" type="text" placeholder="Adv. Rhea Kapoor" maxlength="60" required />
+                    <div class="error-msg" id="nameError">Name is required</div>
+                </div>
+                <div class="field-group">
+                    <label>Profession</label>
+                    <input id="f-profession" type="text" placeholder="Advocate, High Court" maxlength="60" />
+                </div>
+                <div class="field-group">
+                    <label>Tagline</label>
+                    <input id="f-tagline" type="text" placeholder="Civil & property litigation, 12 years at the bar." maxlength="120" />
+                </div>
+                <div class="row-2">
+                    <div class="field-group">
+                        <label>Phone</label>
+                        <input id="f-phone" type="tel" placeholder="+91 98200 12345" maxlength="20" pattern="[0-9+\-\(\) ]+" />
+                        <div class="error-msg" id="phoneError">Enter a valid phone number</div>
+                    </div>
+                    <div class="field-group">
+                        <label>Email</label>
+                        <input id="f-email" type="email" placeholder="rhea@chambers.in" maxlength="60" />
+                        <div class="error-msg" id="emailError">Enter a valid email</div>
+                    </div>
+                </div>
+                <div class="row-2">
+                    <div class="field-group"><label>Office</label><input id="f-office" type="text" placeholder="Fort, Mumbai" maxlength="60" /></div>
+                    <div class="field-group"><label>Website</label><input id="f-web" type="text" placeholder="rheakapoor.in" maxlength="60" /></div>
+                </div>
+
+                <!-- ─── ACCORDION ─── -->
+                <div class="accordion">
+
+                    <div class="accordion-item open">
+                        <div class="accordion-header" onclick="toggleAccordion(this)">
+                            <span class="label-group"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7Z"/><circle cx="12" cy="12" r="3"/></svg>Look</span>
+                            <span class="chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span>
+                        </div>
+                        <div class="accordion-body">
+                            <div class="field-group" style="margin-bottom:4px;">
+                                <label>Card style</label>
+                                <select id="f-style"></select>
+                            </div>
+                            <p class="hint">Auto‑detected from your profession — <strong>override anytime.</strong></p>
+                            <div class="variant-row" id="variantRow"></div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <div class="accordion-header" onclick="toggleAccordion(this)">
+                            <span class="label-group"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="13.5" cy="6.5" r="0.5" fill="currentColor"/><circle cx="17.5" cy="10.5" r="0.5" fill="currentColor"/><circle cx="8.5" cy="7.5" r="0.5" fill="currentColor"/><circle cx="6.5" cy="12.5" r="0.5" fill="currentColor"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.9 0 1.5-.7 1.5-1.5 0-.4-.2-.7-.4-1-.3-.3-.4-.6-.4-1 0-.8.7-1.5 1.5-1.5H16c3.3 0 6-2.7 6-6 0-4.6-4.5-8-10-8Z"/></svg>Accent</span>
+                            <span class="chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span>
+                        </div>
+                        <div class="accordion-body">
+                            <div class="swatch-row" id="swatchRow">
+                                <label class="swatch-custom"><input type="color" id="colorCustom" value="#C85A4A" /></label>
+                            </div>
+                            <button type="button" id="colorReset">Use style default</button>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <div class="accordion-header" onclick="toggleAccordion(this)">
+                            <span class="label-group"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2.5"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>Photo / Logo</span>
+                            <span class="chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span>
+                        </div>
+                        <div class="accordion-body">
+                            <div class="upload-area">
+                                <label class="upload-btn">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg>
+                                    Upload
+                                    <input type="file" id="fileUpload" accept="image/*" style="display:none;" />
+                                </label>
+                                <img class="upload-thumb" id="uploadThumb" style="display:none;" alt="" />
+                                <button class="btn btn-sm" id="uploadClear" style="display:none;padding:4px 10px;">×</button>
+                            </div>
+                            <div class="toggle-row" id="bgRemoveRow" style="display:none;">
+                                <label><input type="checkbox" id="bgRemoveToggle" checked /> Remove background</label>
+                                <label style="color:var(--ink-soft);">Tolerance <input type="range" id="toleranceSlider" min="5" max="80" value="30" style="width:80px;" /></label>
+                            </div>
+                            <p class="hint">Uploads are resized to fit automatically. Background removal works best on a plain or solid-colored background.</p>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <div class="accordion-header" onclick="toggleAccordion(this)">
+                            <span class="label-group"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.7s6.5 7 6.5 11.8a6.5 6.5 0 0 1-13 0C5.5 9.7 12 2.7 12 2.7Z"/></svg>Watermark</span>
+                            <span class="chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span>
+                        </div>
+                        <div class="accordion-body">
+                            <input id="f-watermark" type="text" placeholder="e.g. SAMPLE, your firm name…" maxlength="30" />
+                            <div class="char-count" id="watermarkCount">0 / 30</div>
+                            <div class="wm-controls">
+                                <div>
+                                    <span>Repeat</span>
+                                    <div class="variant-row" id="wmModeRow" style="margin-top:0;">
+                                        <button class="variant-pill active" data-mode="single">Single</button>
+                                        <button class="variant-pill" data-mode="repeated">Repeated</button>
+                                    </div>
+                                </div>
+                                <div>
+                                    <span>Tilt <span id="wmAngleVal">-24°</span></span>
+                                    <input type="range" id="wmAngle" min="-180" max="180" value="-24" />
+                                </div>
+                                <div>
+                                    <span>Strength <span id="wmStrengthVal">14%</span></span>
+                                    <input type="range" id="wmStrength" min="4" max="40" value="14" />
+                                </div>
+                            </div>
+                            <p class="hint">Colored and set in your card's own type, automatically — it always matches whichever style is active.</p>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Pro Upsell -->
+                <div class="pro-upsell">
+                    <p><strong>Go Pro</strong> — remove the watermark, unlock 20+ premium styles, team sharing & analytics. <span style="white-space:nowrap;">$9/mo</span></p>
+                    <button class="btn btn-primary btn-sm" id="btnUpgrade">Upgrade</button>
+                </div>
+            </section>
+
+            <!-- Preview -->
+            <section class="preview-col">
+                <div class="preview-head">
+                    <h2>Preview</h2>
+                    <button class="btn btn-sm" id="btnRandomize" style="padding:5px 12px 5px 10px;font-size:12px;gap:7px;align-items:center;">
+                        <span class="dice-wrap" id="diceWrap">
+                            <span class="dice-cube" id="diceCube">
+                                <span class="face face-front"><span class="dot" style="grid-column:2;grid-row:2;"></span></span>
+                                <span class="face face-back"><span class="dot" style="grid-column:3;grid-row:1;"></span><span class="dot" style="grid-column:1;grid-row:3;"></span></span>
+                                <span class="face face-right"><span class="dot" style="grid-column:3;grid-row:1;"></span><span class="dot" style="grid-column:2;grid-row:2;"></span><span class="dot" style="grid-column:1;grid-row:3;"></span></span>
+                                <span class="face face-left"><span class="dot" style="grid-column:1;grid-row:1;"></span><span class="dot" style="grid-column:3;grid-row:1;"></span><span class="dot" style="grid-column:1;grid-row:3;"></span><span class="dot" style="grid-column:3;grid-row:3;"></span></span>
+                                <span class="face face-top"><span class="dot" style="grid-column:1;grid-row:1;"></span><span class="dot" style="grid-column:3;grid-row:1;"></span><span class="dot" style="grid-column:2;grid-row:2;"></span><span class="dot" style="grid-column:1;grid-row:3;"></span><span class="dot" style="grid-column:3;grid-row:3;"></span></span>
+                                <span class="face face-bottom"><span class="dot" style="grid-column:1;grid-row:1;"></span><span class="dot" style="grid-column:3;grid-row:1;"></span><span class="dot" style="grid-column:1;grid-row:2;"></span><span class="dot" style="grid-column:3;grid-row:2;"></span><span class="dot" style="grid-column:1;grid-row:3;"></span><span class="dot" style="grid-column:3;grid-row:3;"></span></span>
+                            </span>
+                        </span>
+                        Random
+                    </button>
+                </div>
+
+                <div class="stage">
+                    <div class="scissors-print">
+                        <svg viewBox="0 0 24 24"><circle cx="6" cy="6" r="2.4"/><circle cx="6" cy="18" r="2.4"/><path d="M8 8l11.5 11.5M8 16L19.5 4.5M9.6 12L6 15.6"/></svg>
+                        cut along the dotted line
+                    </div>
+
+                    <div class="card-flip" id="cardFlip">
+                        <div class="card" id="card">
+                            <div class="ink-wipe" id="inkWipe"></div>
+                            <div class="card-top" id="cardTop"></div>
+                            <div class="watermark-layer" id="watermarkLayer"></div>
+                            <div class="card-inner">
+                                <svg class="card-motif" id="cardMotif" viewBox="0 0 300 200" preserveAspectRatio="xMidYMid slice"></svg>
+                                <div class="card-head">
+                                    <div class="avatar" id="cardAvatar">AR</div>
+                                    <div>
+                                        <div class="card-name" id="cardName">Adv. Rhea Kapoor</div>
+                                        <div class="card-role" id="cardRole">Advocate, High Court</div>
+                                    </div>
+                                </div>
+                                <div class="card-tagline" id="cardTagline">Civil & property litigation, 12 years at the bar.</div>
+                                <div class="card-details">
+                                    <div class="row" id="rowPhone"><div class="k">Phone</div><div class="v" id="cardPhone">+91 98200 12345</div></div>
+                                    <div class="row" id="rowEmail"><div class="k">Email</div><div class="v" id="cardEmail">rhea@chambers.in</div></div>
+                                    <div class="row" id="rowOffice"><div class="k">Office</div><div class="v" id="cardOffice">Fort, Mumbai</div></div>
+                                    <div class="row" id="rowWeb"><div class="k">Web</div><div class="v" id="cardWeb">rheakapoor.in</div></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-back" id="cardBack">
+                            <div class="card-back-qr" id="cardBackQr"></div>
+                            <div class="card-back-name" id="cardBackName">Adv. Rhea Kapoor</div>
+                            <div class="card-back-label">Scan to save contact</div>
+                        </div>
+                    </div>
+
+                    <button class="flip-hint" id="flipHint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 2.1l4 4-4 4"/><path d="M3 12.6v-1a4 4 0 0 1 4-4h14"/><path d="M7 21.9l-4-4 4-4"/><path d="M21 11.4v1a4 4 0 0 1-4 4H3"/></svg>Tap to flip</button>
+                    <svg class="stamp-fx" id="stampFx" viewBox="0 0 130 130"><circle cx="65" cy="65" r="52" fill="none" stroke="currentColor" stroke-width="2.5"/><circle cx="65" cy="65" r="42" fill="none" stroke="currentColor" stroke-width="1.2" opacity="0.6"/><path d="M44 68l14 14 30-32" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </div>
+
+                <div class="actions">
+                    <button class="btn btn-primary" id="btnShare"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 10.5l6.8-3.9M8.6 13.5l6.8 3.9"/></svg>Share</button>
+                    <button class="btn" id="btnSave"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg>Save image</button>
+                    <button class="btn" id="btnPrint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>Print</button>
+                    <button class="btn" id="btnVcard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 7a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2Z"/><circle cx="9" cy="12" r="2"/><path d="M15 10h4M15 14h4M5 16c.5-1.6 1.8-2.5 4-2.5s3.5.9 4 2.5"/></svg>VCF</button>
+                </div>
+                <p style="font-size:11.5px;color:var(--ink-soft);margin-top:10px;line-height:1.5;">Share opens your phone's share sheet; on desktop it downloads.</p>
+                <div class="toast" id="toast"></div>
+            </section>
+
+        </div>
+
+        <footer>MERAPARICHAY · where your cards tell your story</footer>
+    </div>
+
+    <!-- ─── PRO MODAL ─── -->
+    <div class="modal-overlay" id="proModal">
+        <div class="modal-box">
+            <span class="modal-sparkle"></span>
+            <span class="modal-sparkle"></span>
+            <span class="modal-sparkle"></span>
+            <span class="modal-emoji-big"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.08-2.91a2.18 2.18 0 0 0-2.92-.09Z"/><path d="M12 15l-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2Z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></svg></span>
+            <div class="modal-title">Coming <span>Soon</span></div>
+            <div class="modal-sub">
+                We're building something <strong>extraordinary</strong> for you.<br />
+                Pro features are just around the corner.
+            </div>
+            <div class="modal-features">
+                <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Remove watermark</span>
+                <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>30+ premium styles</span>
+                <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Team sharing</span>
+                <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Analytics dashboard</span>
+                <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>PDF / SVG export</span>
+                <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Custom domain</span>
+            </div>
+            <button class="modal-close-btn" id="modalCloseBtn">Got it</button>
+            <div class="modal-foot-note">— stay tuned —</div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js">
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js">
+    </script>
+    <script>
+        // ─── Accordion Toggle ────────────────────────────────────────────────
+        function toggleAccordion(headerEl) {
+            var item = headerEl.closest('.accordion-item');
+            if (!item) return;
+            item.classList.toggle('open');
+        }
+
+        // ─── THEMES ──────────────────────────────────────────────────────────
+        var THEMES = {
+            advocate: {
+                label: "Advocate / Lawyer",
+                match: ["advocate", "lawyer", "attorney", "legal", "solicitor", "counsel", "judge", "llb", "litigat",
+                    "bar council", "notary"
+                ],
+                motif: '<circle cx="255" cy="35" r="70" fill="currentColor" opacity="0.5"/><g transform="translate(255,35)" stroke="currentColor" stroke-width="2" fill="none" opacity="0.9"><path d="M0 -18v36M-20 0h40"/><path d="M-20 0l-8 14a8 8 0 0 0 16 0Z"/><path d="M20 0l-8 14a8 8 0 0 0 16 0Z"/><path d="M-16 -18h32"/></g>',
+                variants: [{ id: "classic", label: "Classic", vars: { "--c-bg": "#FAF6EE", "--c-surface": "transparent",
+                            "--c-ink": "#1B2A4A", "--c-ink-soft": "#4E5A73", "--c-accent": "#C1673D",
+                            "--c-accent2": "#C1673D", "--c-avatar-ink": "#FAF6EE",
+                            "--c-display": "'Playfair Display',serif", "--c-body": "'Inter',sans-serif",
+                            "--c-label-font": "'Inter',sans-serif", "--c-avatar-radius": "12px",
+                            "--c-tracking": "0.16em", "--c-motif-opacity": "0.14", "--c-topbar-h": "6px",
+                            "--c-topbar": "linear-gradient(90deg,#C1673D,#E8B679 60%,#C1673D)" } },
+                    { id: "ink", label: "Ink & gold", vars: { "--c-bg": "#1B2333", "--c-surface": "transparent",
+                            "--c-ink": "#F3EFE2", "--c-ink-soft": "#B9B1A0", "--c-accent": "#D4A65B",
+                            "--c-accent2": "#D4A65B", "--c-avatar-ink": "#1B2333",
+                            "--c-display": "'Playfair Display',serif", "--c-body": "'Inter',sans-serif",
+                            "--c-label-font": "'Inter',sans-serif", "--c-avatar-radius": "12px",
+                            "--c-tracking": "0.16em", "--c-motif-opacity": "0.18", "--c-topbar-h": "6px",
+                            "--c-topbar": "linear-gradient(90deg,#D4A65B,#8F6A2C 60%,#D4A65B)" } }]
+            },
+            doctor: {
+                label: "Doctor / Medical",
+                match: ["doctor", "dr.", "dr ", "physician", "dentist", "surgeon", "medical", "clinic", "hospital",
+                    "pediatric", "cardio", "ortho", "dermat", "md", "mbbs", "bds"
+                ],
+                motif: '<polyline points="0,150 60,150 78,110 96,175 112,90 128,150 300,150" fill="none" stroke="currentColor" stroke-width="2.4" opacity="0.16" stroke-linejoin="round" stroke-linecap="round"/>',
+                variants: [{ id: "classic", label: "Classic", vars: { "--c-bg": "#FFFFFF", "--c-surface": "transparent",
+                            "--c-ink": "#0E3D3A", "--c-ink-soft": "#4B6E6A", "--c-accent": "#0E5C56",
+                            "--c-accent2": "#0E5C56", "--c-avatar-ink": "#FFFFFF",
+                            "--c-display": "'Inter',sans-serif", "--c-body": "'Inter',sans-serif",
+                            "--c-label-font": "'Inter',sans-serif", "--c-avatar-radius": "50%",
+                            "--c-tracking": "0.12em", "--c-motif-opacity": "0.5",
+                            "--c-border": "1px solid #E3ECE9", "--c-topbar-h": "0px",
+                            "--c-topbar": "transparent" } },
+                    { id: "calm", label: "Calm", vars: { "--c-bg": "#EAF6F1", "--c-surface": "transparent",
+                            "--c-ink": "#0E3D3A", "--c-ink-soft": "#4B6E6A", "--c-accent": "#E4572E",
+                            "--c-accent2": "#0E5C56", "--c-avatar-ink": "#FFFFFF",
+                            "--c-display": "'Inter',sans-serif", "--c-body": "'Inter',sans-serif",
+                            "--c-label-font": "'Inter',sans-serif", "--c-avatar-radius": "50%",
+                            "--c-tracking": "0.12em", "--c-motif-opacity": "0.5", "--c-topbar-h": "4px",
+                            "--c-topbar": "#0E5C56" } }]
+            },
+            architect: {
+                label: "Architect / Interior",
+                match: ["architect", "interior design", "urban plan", "structural", "town plan"],
+                motif: '<g stroke="currentColor" stroke-width="1" opacity="0.28">' +
+                    Array.from({ length: 8 }).map(function(_, i) { return '<line x1="' + (i * 38) +
+                            '" y1="0" x2="' + (i * 38) + '" y2="200"/>'; }).join('') +
+                    Array.from({ length: 6 }).map(function(_, i) { return '<line x1="0" y1="' + (i * 38) +
+                            '" x2="300" y2="' + (i * 38) + '"/>'; }).join('') +
+                    '</g><path d="M240 20h40v40" fill="none" stroke="currentColor" stroke-width="1.6" opacity="0.55"/>',
+                variants: [{ id: "classic", label: "Classic", vars: { "--c-bg": "#E7E4DC",
+                            "--c-surface": "transparent", "--c-ink": "#22252A", "--c-ink-soft": "#5C6066",
+                            "--c-accent": "#2B6CB0", "--c-accent2": "#22252A", "--c-avatar-ink": "#E7E4DC",
+                            "--c-display": "'Space Grotesk',sans-serif", "--c-body": "'Inter',sans-serif",
+                            "--c-label-font": "'Inter',sans-serif", "--c-avatar-radius": "4px",
+                            "--c-tracking": "0.14em", "--c-motif-opacity": "0.5", "--c-topbar-h": "0px",
+                            "--c-topbar": "transparent" } },
+                    { id: "blueprint", label: "Blueprint", vars: { "--c-bg": "#122A4A",
+                            "--c-surface": "transparent", "--c-ink": "#EAF2FA", "--c-ink-soft": "#9FB6D1",
+                            "--c-accent": "#7FC2FF", "--c-accent2": "#EAF2FA", "--c-avatar-ink": "#122A4A",
+                            "--c-display": "'Space Grotesk',sans-serif", "--c-body": "'Inter',sans-serif",
+                            "--c-label-font": "'Inter',sans-serif", "--c-avatar-radius": "4px",
+                            "--c-tracking": "0.14em", "--c-motif-opacity": "0.6", "--c-topbar-h": "0px",
+                            "--c-topbar": "transparent" } }]
+            },
+            creative: {
+                label: "Designer / Photographer / Artist",
+                match: ["designer", "photograph", "artist", "creative", "studio", "stylist", "illustrat", "filmmaker",
+                    "videograph"
+                ],
+                motif: '<g transform="translate(255,35)" opacity="0.35">' +
+                    Array.from({ length: 6 }).map(function(_, i) { var a = i * 60; return '<line x1="0" y1="-6" x2="0" y2="-30" stroke="#fff" stroke-width="4" stroke-linecap="round" transform="rotate(' +
+                            a + ')" />'; }).join('') +
+                    '</g>',
+                variants: [{ id: "classic", label: "Classic", vars: { "--c-bg": "linear-gradient(135deg,#6E3AC2,#FF7A45)",
+                            "--c-surface": "transparent", "--c-ink": "#FFFFFF",
+                            "--c-ink-soft": "rgba(255,255,255,0.78)", "--c-accent": "#FFE8AA",
+                            "--c-accent2": "rgba(255,255,255,0.22)", "--c-avatar-ink": "#FFFFFF",
+                            "--c-display": "'Bebas Neue',sans-serif", "--c-body": "'Inter',sans-serif",
+                            "--c-label-font": "'Inter',sans-serif", "--c-avatar-radius": "50%",
+                            "--c-tracking": "0.16em", "--c-motif-opacity": "0.9", "--c-topbar-h": "0px",
+                            "--c-topbar": "transparent" } },
+                    { id: "mono", label: "Mono bold", vars: { "--c-bg": "#14121A",
+                            "--c-surface": "transparent", "--c-ink": "#FFFFFF",
+                            "--c-ink-soft": "rgba(255,255,255,0.7)", "--c-accent": "#FF3D8A",
+                            "--c-accent2": "#FF3D8A", "--c-avatar-ink": "#14121A",
+                            "--c-display": "'Bebas Neue',sans-serif", "--c-body": "'Inter',sans-serif",
+                            "--c-label-font": "'Inter',sans-serif", "--c-avatar-radius": "50%",
+                            "--c-tracking": "0.18em", "--c-motif-opacity": "0.9", "--c-topbar-h": "0px",
+                            "--c-topbar": "transparent" } }]
+            },
+            realestate: {
+                label: "Real Estate / Realtor",
+                match: ["real estate", "realtor", "property", "broker", "builder", "developer", "reality"],
+                motif: '<g transform="translate(250,40) rotate(-18)" stroke="currentColor" stroke-width="2.4" fill="none" opacity="0.9"><circle cx="0" cy="0" r="12"/><line x1="8.5" y1="8.5" x2="34" y2="34"/><line x1="26" y1="26" x2="26" y2="34"/><line x1="34" y1="26" x2="34" y2="34"/></g>',
+                variants: [{ id: "classic", label: "Classic", vars: { "--c-bg": "#F7F3E7",
+                            "--c-surface": "transparent", "--c-ink": "#16301F", "--c-ink-soft": "#4E5F52",
+                            "--c-accent": "#B8925A", "--c-accent2": "#163A2E", "--c-avatar-ink": "#F7F3E7",
+                            "--c-display": "'Playfair Display',serif", "--c-body": "'Inter',sans-serif",
+                            "--c-label-font": "'Inter',sans-serif", "--c-avatar-radius": "12px",
+                            "--c-tracking": "0.15em", "--c-motif-opacity": "0.15",
+                            "--c-border": "1.5px solid #B8925A", "--c-topbar-h": "6px",
+                            "--c-topbar": "#163A2E" } },
+                    { id: "skyline", label: "Skyline", vars: { "--c-bg": "#1B2430",
+                            "--c-surface": "transparent", "--c-ink": "#F4EFE2", "--c-ink-soft": "#B7B0A0",
+                            "--c-accent": "#C9A25A", "--c-accent2": "#C9A25A", "--c-avatar-ink": "#1B2430",
+                            "--c-display": "'Playfair Display',serif", "--c-body": "'Inter',sans-serif",
+                            "--c-label-font": "'Inter',sans-serif", "--c-avatar-radius": "10px",
+                            "--c-tracking": "0.15em", "--c-motif-opacity": "0.18", "--c-topbar-h": "5px",
+                            "--c-topbar": "#C9A25A" } }]
+            },
+            teacher: {
+                label: "Teacher / Professor",
+                match: ["teacher", "professor", "tutor", "educator", "principal", "faculty", "lecturer", "academic",
+                    "coaching institute"
+                ],
+                motif: '<g transform="translate(255,45)" stroke="currentColor" stroke-width="2" fill="none" opacity="0.9"><path d="M-34 -8c10 -8 22 -8 34 0c12 -8 24 -8 34 0v20c-10 -8 -22 -8 -34 0c-12 -8 -24 -8 -34 0Z"/></g>',
+                variants: [{ id: "classic", label: "Classic", vars: { "--c-bg": "#FBF3E7",
+                            "--c-surface": "transparent", "--c-ink": "#4A1420", "--c-ink-soft": "#7A5A5D",
+                            "--c-accent": "#8E1F2E", "--c-accent2": "#8E1F2E", "--c-avatar-ink": "#FBF3E7",
+                            "--c-display": "'Cormorant Garamond',serif",
+                            "--c-body": "'EB Garamond',serif", "--c-label-font": "'Inter',sans-serif",
+                            "--c-avatar-radius": "50%", "--c-tracking": "0.15em", "--c-motif-opacity": "0.15",
+                            "--c-topbar-h": "0px", "--c-topbar": "transparent" } },
+                    { id: "chalkboard", label: "Chalkboard", vars: { "--c-bg": "#233B2E",
+                            "--c-surface": "transparent", "--c-ink": "#F3F1E8", "--c-ink-soft": "#BFC9BD",
+                            "--c-accent": "#E8D8A0", "--c-accent2": "#E8D8A0", "--c-avatar-ink": "#233B2E",
+                            "--c-display": "'Cormorant Garamond',serif",
+                            "--c-body": "'EB Garamond',serif", "--c-label-font": "'Inter',sans-serif",
+                            "--c-avatar-radius": "50%", "--c-tracking": "0.15em", "--c-motif-opacity": "0.25",
+                            "--c-topbar-h": "0px", "--c-topbar": "transparent" } }]
+            },
+            chef: {
+                label: "Chef / Restaurant",
+                match: ["chef", "restaurant", "culinary", "cafe", "café", "bakery", "caterer", "cuisine", "kitchen"],
+                motif: '<g stroke="currentColor" stroke-width="1.8" opacity="0.25" fill="none"><path d="M270 10v50M262 10v18a4 4 0 0 0 4 4h0a4 4 0 0 0 4 -4V10M278 10v18a4 4 0 0 1 -4 4"/><path d="M240 10c-8 0 -8 14 0 22l4 4v24"/></g>',
+                variants: [{ id: "classic", label: "Classic", vars: { "--c-bg": "#211A16",
+                            "--c-surface": "transparent", "--c-ink": "#F3E9DD", "--c-ink-soft": "#C7B6A6",
+                            "--c-accent": "#D89A3D", "--c-accent2": "#C1443B", "--c-avatar-ink": "#F3E9DD",
+                            "--c-display": "'Oswald',sans-serif", "--c-body": "'Inter',sans-serif",
+                            "--c-label-font": "'Inter',sans-serif", "--c-avatar-radius": "10px",
+                            "--c-tracking": "0.16em", "--c-motif-opacity": "0.5", "--c-topbar-h": "5px",
+                            "--c-topbar": "linear-gradient(90deg,#C1443B,#D89A3D)" } },
+                    { id: "bistro", label: "Bistro", vars: { "--c-bg": "#F6ECDC", "--c-surface": "transparent",
+                            "--c-ink": "#3A1E14", "--c-ink-soft": "#7A5B44", "--c-accent": "#B23A2E",
+                            "--c-accent2": "#B23A2E", "--c-avatar-ink": "#F6ECDC",
+                            "--c-display": "'Oswald',sans-serif", "--c-body": "'Inter',sans-serif",
+                            "--c-label-font": "'Inter',sans-serif", "--c-avatar-radius": "10px",
+                            "--c-tracking": "0.16em", "--c-motif-opacity": "0.3", "--c-topbar-h": "5px",
+                            "--c-topbar": "linear-gradient(90deg,#B23A2E,#D89A3D)" } }]
+            },
+            fitness: {
+                label: "Fitness / Coach",
+                match: ["fitness", "trainer", "coach", "gym", "yoga", "crossfit", "athletic", "personal training",
+                    "nutritionist"
+                ],
+                motif: '<g fill="currentColor" opacity="0.14"><polygon points="120,0 300,0 240,200 60,200"/></g>',
+                variants: [{ id: "classic", label: "Classic", vars: { "--c-bg": "#111214",
+                            "--c-surface": "transparent", "--c-ink": "#F2F2ED", "--c-ink-soft": "#A7ACA0",
+                            "--c-accent": "#C6FF3D", "--c-accent2": "#C6FF3D", "--c-avatar-ink": "#111214",
+                            "--c-display": "'Bebas Neue',sans-serif", "--c-body": "'Inter',sans-serif",
+                            "--c-label-font": "'Inter',sans-serif", "--c-avatar-radius": "8px",
+                            "--c-tracking": "0.2em", "--c-motif-opacity": "0.9", "--c-topbar-h": "0px",
+                            "--c-topbar": "transparent" } },
+                    { id: "heat", label: "Heat", vars: { "--c-bg": "#111214", "--c-surface": "transparent",
+                            "--c-ink": "#F2F2ED", "--c-ink-soft": "#A7ACA0", "--c-accent": "#FF5A36",
+                            "--c-accent2": "#FF5A36", "--c-avatar-ink": "#111214",
+                            "--c-display": "'Bebas Neue',sans-serif", "--c-body": "'Inter',sans-serif",
+                            "--c-label-font": "'Inter',sans-serif", "--c-avatar-radius": "8px",
+                            "--c-tracking": "0.2em", "--c-motif-opacity": "0.9", "--c-topbar-h": "0px",
+                            "--c-topbar": "transparent" } }]
+            },
+            finance: {
+                label: "Finance / Consultant / CA",
+                match: ["finance", "consultant", "chartered accountant", "ca ", "accountant", "advisor", "analyst",
+                    "investment", "wealth", "tax", "audit", "ca,"
+                ],
+                motif: '<g fill="currentColor" opacity="0.12"><rect x="230" y="120" width="14" height="60"/><rect x="252" y="90" width="14" height="90"/><rect x="274" y="60" width="14" height="120"/></g>',
+                variants: [{ id: "classic", label: "Classic", vars: { "--c-bg": "#FFFFFF",
+                            "--c-surface": "transparent", "--c-ink": "#101B33", "--c-ink-soft": "#525E7A",
+                            "--c-accent": "#1F8A5F", "--c-accent2": "#101B33", "--c-avatar-ink": "#FFFFFF",
+                            "--c-display": "'Space Grotesk',sans-serif", "--c-body": "'Inter',sans-serif",
+                            "--c-label-font": "'Inter',sans-serif", "--c-avatar-radius": "6px",
+                            "--c-tracking": "0.13em", "--c-motif-opacity": "0.6",
+                            "--c-border": "1px solid #E4E8F0", "--c-topbar-h": "4px",
+                            "--c-topbar": "#1F8A5F" } },
+                    { id: "private", label: "Private", vars: { "--c-bg": "#0E1830",
+                            "--c-surface": "transparent", "--c-ink": "#F1EFE6", "--c-ink-soft": "#A9AEC2",
+                            "--c-accent": "#C9A25A", "--c-accent2": "#C9A25A", "--c-avatar-ink": "#0E1830",
+                            "--c-display": "'Space Grotesk',sans-serif", "--c-body": "'Inter',sans-serif",
+                            "--c-label-font": "'Inter',sans-serif", "--c-avatar-radius": "6px",
+                            "--c-tracking": "0.13em", "--c-motif-opacity": "0.5", "--c-topbar-h": "4px",
+                            "--c-topbar": "#C9A25A" } }]
+            },
+            engineer: {
+                label: "Engineer / Developer",
+                match: ["engineer", "developer", "software", "programmer", "it consultant", "full stack", "devops",
+                    "technolog"
+                ],
+                motif: '<g stroke="currentColor" stroke-width="1.4" opacity="0.5"><circle cx="230" cy="30" r="3" fill="currentColor" stroke="none"/><circle cx="270" cy="20" r="3" fill="currentColor" stroke="none"/><circle cx="285" cy="55" r="3" fill="currentColor" stroke="none"/><circle cx="245" cy="60" r="3" fill="currentColor" stroke="none"/><path d="M230 30L270 20M270 20L285 55M285 55L245 60M245 60L230 30"/></g>',
+                variants: [{ id: "classic", label: "Classic", vars: { "--c-bg": "#1A1D22",
+                            "--c-surface": "transparent", "--c-ink": "#EAEFF0", "--c-ink-soft": "#9AA3A6",
+                            "--c-accent": "#34D6C0", "--c-accent2": "#34D6C0", "--c-avatar-ink": "#0E1013",
+                            "--c-display": "'Space Grotesk',sans-serif", "--c-body": "'Inter',sans-serif",
+                            "--c-label-font": "'Inter',sans-serif", "--c-avatar-radius": "6px",
+                            "--c-tracking": "0.1em", "--c-motif-opacity": "0.4", "--c-topbar-h": "0px",
+                            "--c-topbar": "transparent" } },
+                    { id: "terminal", label: "Terminal", vars: { "--c-bg": "#0A0C0A",
+                            "--c-surface": "transparent", "--c-ink": "#C9FFD8", "--c-ink-soft": "#6FA37D",
+                            "--c-accent": "#39FF7A", "--c-accent2": "#39FF7A", "--c-avatar-ink": "#0A0C0A",
+                            "--c-display": "'Space Grotesk',sans-serif", "--c-body": "'Inter',sans-serif",
+                            "--c-label-font": "'Inter',sans-serif", "--c-avatar-radius": "4px",
+                            "--c-tracking": "0.1em", "--c-motif-opacity": "0.5", "--c-topbar-h": "0px",
+                            "--c-topbar": "transparent" } }]
+            },
+            default: {
+                label: "General / Other",
+                match: [],
+                motif: '<circle cx="255" cy="35" r="26" fill="none" stroke="currentColor" stroke-width="1.6"/>',
+                variants: [{ id: "classic", label: "Classic", vars: { "--c-bg": "#F7F4EA",
+                            "--c-surface": "transparent", "--c-ink": "#1C2130", "--c-ink-soft": "#68635A",
+                            "--c-accent": "#C85A4A", "--c-accent2": "#C85A4A", "--c-avatar-ink": "#F7F4EA",
+                            "--c-display": "'Playfair Display',serif", "--c-body": "'Inter',sans-serif",
+                            "--c-label-font": "'Inter',sans-serif", "--c-avatar-radius": "12px",
+                            "--c-tracking": "0.14em", "--c-motif-opacity": "0.12", "--c-topbar-h": "4px",
+                            "--c-topbar": "#C85A4A" } },
+                    { id: "mono", label: "Mono", vars: { "--c-bg": "#FFFFFF", "--c-surface": "transparent",
+                            "--c-ink": "#14161C", "--c-ink-soft": "#6B6F78", "--c-accent": "#14161C",
+                            "--c-accent2": "#14161C", "--c-avatar-ink": "#FFFFFF",
+                            "--c-display": "'Playfair Display',serif", "--c-body": "'Inter',sans-serif",
+                            "--c-label-font": "'Inter',sans-serif", "--c-avatar-radius": "12px",
+                            "--c-tracking": "0.14em", "--c-motif-opacity": "0.08", "--c-topbar-h": "0px",
+                            "--c-topbar": "transparent" } }]
+            }
+        };
+        var THEME_ORDER = ["advocate", "doctor", "architect", "creative", "realestate", "teacher", "chef", "fitness",
+            "finance", "engineer", "default"
+        ];
+
+        // ─── DOM refs ──────────────────────────────────────────────────────────
+        var els = {
+            name: document.getElementById('f-name'),
+            profession: document.getElementById('f-profession'),
+            tagline: document.getElementById('f-tagline'),
+            phone: document.getElementById('f-phone'),
+            email: document.getElementById('f-email'),
+            office: document.getElementById('f-office'),
+            web: document.getElementById('f-web'),
+            style: document.getElementById('f-style'),
+            card: document.getElementById('card'),
+            cardTop: document.getElementById('cardTop'),
+            cardMotif: document.getElementById('cardMotif'),
+            cardAvatar: document.getElementById('cardAvatar'),
+            cardName: document.getElementById('cardName'),
+            cardRole: document.getElementById('cardRole'),
+            cardTagline: document.getElementById('cardTagline'),
+            cardPhone: document.getElementById('cardPhone'),
+            cardEmail: document.getElementById('cardEmail'),
+            cardOffice: document.getElementById('cardOffice'),
+            cardWeb: document.getElementById('cardWeb'),
+            rowPhone: document.getElementById('rowPhone'),
+            rowEmail: document.getElementById('rowEmail'),
+            rowOffice: document.getElementById('rowOffice'),
+            rowWeb: document.getElementById('rowWeb'),
+            toast: document.getElementById('toast'),
+            stage: document.querySelector('.stage'),
+            inkWipe: document.getElementById('inkWipe'),
+            stampFx: document.getElementById('stampFx'),
+            swatchRow: document.getElementById('swatchRow'),
+            variantRow: document.getElementById('variantRow'),
+            colorCustom: document.getElementById('colorCustom'),
+            colorReset: document.getElementById('colorReset'),
+            fileUpload: document.getElementById('fileUpload'),
+            uploadThumb: document.getElementById('uploadThumb'),
+            uploadClear: document.getElementById('uploadClear'),
+            bgRemoveRow: document.getElementById('bgRemoveRow'),
+            bgRemoveToggle: document.getElementById('bgRemoveToggle'),
+            toleranceSlider: document.getElementById('toleranceSlider'),
+            watermark: document.getElementById('f-watermark'),
+            watermarkCount: document.getElementById('watermarkCount'),
+            watermarkLayer: document.getElementById('watermarkLayer'),
+            wmModeRow: document.getElementById('wmModeRow'),
+            wmAngle: document.getElementById('wmAngle'),
+            wmAngleVal: document.getElementById('wmAngleVal'),
+            wmStrength: document.getElementById('wmStrength'),
+            wmStrengthVal: document.getElementById('wmStrengthVal'),
+            cardFlip: document.getElementById('cardFlip'),
+            cardBack: document.getElementById('cardBack'),
+            cardBackQr: document.getElementById('cardBackQr'),
+            cardBackName: document.getElementById('cardBackName'),
+            flipHint: document.getElementById('flipHint'),
+            btnRandomize: document.getElementById('btnRandomize'),
+            btnUpgrade: document.getElementById('btnUpgrade'),
+            btnTryPro: document.getElementById('btnTryPro'),
+            nameError: document.getElementById('nameError'),
+            phoneError: document.getElementById('phoneError'),
+            emailError: document.getElementById('emailError'),
+            diceCube: document.getElementById('diceCube'),
+            diceWrap: document.getElementById('diceWrap'),
+            proModal: document.getElementById('proModal'),
+            modalClose: document.getElementById('modalCloseBtn'),
+        };
+
+        // ─── Populate style select ────────────────────────────────────────────
+        THEME_ORDER.forEach(function(key) {
+            var opt = document.createElement('option');
+            opt.value = key;
+            opt.textContent = THEMES[key].label;
+            els.style.appendChild(opt);
+        });
+        var autoOpt = document.createElement('option');
+        autoOpt.value = "auto";
+        autoOpt.textContent = "Auto (detect)";
+        els.style.insertBefore(autoOpt, els.style.firstChild);
+        els.style.value = "auto";
+
+        var userOverrode = false;
+        els.style.addEventListener('change', function() {
+            userOverrode = (els.style.value !== "auto");
+            render();
+        });
+
+        // ─── State ──────────────────────────────────────────────────────────
+        var DEFAULTS = {
+            name: "Adv. Rhea Kapoor",
+            profession: "Advocate, High Court",
+            tagline: "Civil & property litigation, 12 years at the bar.",
+            phone: "+91 98200 12345",
+            email: "rhea@chambers.in",
+            office: "Fort, Mumbai",
+            web: "rheakapoor.in",
+            style: "auto",
+            accent: null,
+            variant: null,
+            watermark: "",
+            wmMode: "single",
+            wmAngle: -24,
+            wmStrength: 14
+        };
+
+        function loadState() {
+            try {
+                var raw = localStorage.getItem('cardforge-state');
+                if (!raw) return DEFAULTS;
+                return Object.assign({}, DEFAULTS, JSON.parse(raw));
+            } catch (e) { return DEFAULTS; }
+        }
+
+        function saveState() {
+            try {
+                localStorage.setItem('cardforge-state', JSON.stringify({
+                    name: els.name.value,
+                    profession: els.profession.value,
+                    tagline: els.tagline.value,
+                    phone: els.phone.value,
+                    email: els.email.value,
+                    office: els.office.value,
+                    web: els.web.value,
+                    style: els.style.value,
+                    accent: customAccent,
+                    variant: activeVariantId,
+                    watermark: els.watermark.value,
+                    wmMode: watermarkMode,
+                    wmAngle: parseInt(els.wmAngle.value, 10),
+                    wmStrength: parseInt(els.wmStrength.value, 10)
+                }));
+            } catch (e) {}
+        }
+
+        var initial = loadState();
+        els.name.value = initial.name;
+        els.profession.value = initial.profession;
+        els.tagline.value = initial.tagline;
+        els.phone.value = initial.phone;
+        els.email.value = initial.email;
+        els.office.value = initial.office;
+        els.web.value = initial.web;
+        els.style.value = initial.style || "auto";
+        userOverrode = (els.style.value !== "auto");
+        var customAccent = initial.accent || null;
+        var activeVariantId = initial.variant || null;
+        var lastFamilyKey = null;
+        els.watermark.value = initial.watermark || "";
+        els.wmAngle.value = initial.wmAngle;
+        els.wmStrength.value = initial.wmStrength;
+        var watermarkMode = (initial.wmMode === "repeated") ? "repeated" : "single";
+        var uploadedImageDataUrl = null;
+        var originalUploadCanvas = null;
+
+        // ─── Validation ────────────────────────────────────────────────────
+        function validateField(el, errorEl, testFn, msg) {
+            var val = el.value.trim();
+            var ok = testFn(val);
+            if (!ok && val !== '') {
+                el.classList.add('error');
+                errorEl.textContent = msg || 'Invalid input';
+                errorEl.classList.add('show');
+            } else {
+                el.classList.remove('error');
+                errorEl.classList.remove('show');
+            }
+            return ok;
+        }
+
+        function validateName() {
+            return validateField(els.name, els.nameError, function(v) { return v.length > 0; }, 'Name is required');
+        }
+
+        function validatePhone() {
+            return validateField(els.phone, els.phoneError, function(v) {
+                return v === '' || /^[0-9+\-() ]{7,20}$/.test(v);
+            }, 'Enter a valid phone number');
+        }
+
+        function validateEmail() {
+            return validateField(els.email, els.emailError, function(v) {
+                return v === '' || /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v);
+            }, 'Enter a valid email');
+        }
+
+        els.name.addEventListener('blur', validateName);
+        els.name.addEventListener('input', validateName);
+        els.phone.addEventListener('blur', validatePhone);
+        els.phone.addEventListener('input', validatePhone);
+        els.email.addEventListener('blur', validateEmail);
+        els.email.addEventListener('input', validateEmail);
+
+        // ─── Helpers & Render ──────────────────────────────────────────────
+        function detectTheme(text) {
+            var t = (text || "").toLowerCase();
+            if (!t.trim()) return "default";
+            for (var i = 0; i < THEME_ORDER.length; i++) {
+                var key = THEME_ORDER[i];
+                if (key === "default") continue;
+                var kws = THEMES[key].match;
+                for (var j = 0; j < kws.length; j++) {
+                    if (t.indexOf(kws[j]) !== -1) return key;
+                }
+            }
+            return "default";
+        }
+
+        function initials(name) {
+            var parts = (name || "").trim().split(/\s+/).filter(Boolean);
+            if (parts.length === 0) return "—";
+            if (parts.length === 1) return parts[0].charAt(0).toUpperCase();
+            return (parts[0].charAt(0) + parts[1].charAt(0)).toUpperCase();
+        }
+
+        function hexToRgb(hex) {
+            var h = hex.replace('#', '');
+            if (h.length === 3) h = h.split('').map(c => c + c).join('');
+            var num = parseInt(h, 16);
+            return { r: (num >> 16) & 255, g: (num >> 8) & 255, b: num & 255 };
+        }
+
+        function idealTextColor(hex) {
+            var c = hexToRgb(hex);
+            var lum = (0.299 * c.r + 0.587 * c.g + 0.114 * c.b) / 255;
+            return lum > 0.62 ? '#1C2130' : '#FFFFFF';
+        }
+
+        function applyAccentOverride() {
+            if (!customAccent) return;
+            els.card.style.setProperty('--c-accent', customAccent);
+            els.card.style.setProperty('--c-accent2', customAccent);
+            els.card.style.setProperty('--c-avatar-ink', idealTextColor(customAccent));
+        }
+
+        function getVariant(familyKey, variantId) {
+            var theme = THEMES[familyKey];
+            var v = theme.variants.filter(function(v) { return v.id === variantId; })[0];
+            return v || theme.variants[0];
+        }
+
+        function applyTheme(familyKey, variantId) {
+            var theme = THEMES[familyKey];
+            var variant = getVariant(familyKey, variantId);
+            var comboKey = familyKey + ':' + variant.id;
+            var isChange = lastFamilyKey && lastFamilyKey !== comboKey;
+
+            if (isChange && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                els.inkWipe.style.transition = 'none';
+                els.inkWipe.style.background = customAccent || variant.vars["--c-accent2"] || variant.vars[
+                "--c-accent"];
+                els.inkWipe.style.transform = 'translateX(0%) skewX(-10deg)';
+                void els.inkWipe.offsetWidth;
+            }
+
+            Object.keys(variant.vars).forEach(function(k) {
+                els.card.style.setProperty(k, variant.vars[k]);
+            });
+            els.card.style.setProperty("--c-border", variant.vars["--c-border"] || "none");
+            els.cardTop.style.height = variant.vars["--c-topbar-h"] || "0px";
+            els.cardTop.style.background = variant.vars["--c-topbar"] || "transparent";
+            els.cardMotif.innerHTML = theme.motif;
+            applyAccentOverride();
+
+            if (isChange && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                requestAnimationFrame(function() {
+                    els.inkWipe.style.transition = 'transform 0.6s cubic-bezier(.76,0,.24,1)';
+                    els.inkWipe.style.transform = 'translateX(105%) skewX(-10deg)';
+                });
+            }
+            lastFamilyKey = comboKey;
+            return variant.id;
+        }
+
+        function renderVariantPicker(familyKey) {
+            var theme = THEMES[familyKey];
+            els.variantRow.innerHTML = '';
+            if (theme.variants.length < 2) {
+                els.variantRow.style.display = 'none';
+                return;
+            }
+            els.variantRow.style.display = 'flex';
+            theme.variants.forEach(function(v) {
+                var btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'variant-pill' + (v.id === activeVariantId ? ' active' : '');
+                btn.textContent = v.label;
+                btn.addEventListener('click', function() {
+                    activeVariantId = v.id;
+                    render();
+                });
+                els.variantRow.appendChild(btn);
+            });
+        }
+
+        function renderAvatar() {
+            if (uploadedImageDataUrl) {
+                els.cardAvatar.innerHTML = '';
+                var img = document.createElement('img');
+                img.src = uploadedImageDataUrl;
+                img.alt = '';
+                els.cardAvatar.appendChild(img);
+                els.cardAvatar.classList.add('has-image');
+            } else {
+                els.cardAvatar.innerHTML = '';
+                els.cardAvatar.textContent = initials(els.name.value);
+                els.cardAvatar.classList.remove('has-image');
+            }
+        }
+
+        function render() {
+            var detected = detectTheme(els.profession.value);
+            if (!userOverrode) els.style.value = "auto";
+            var activeKey = userOverrode ? els.style.value : detected;
+
+            if (activeKey !== lastFamilyKey) {
+                var stillValid = THEMES[activeKey].variants.some(function(v) { return v.id === activeVariantId; });
+                if (!stillValid) activeVariantId = THEMES[activeKey].variants[0].id;
+                lastFamilyKey = activeKey;
+            }
+            renderVariantPicker(activeKey);
+
+            els.cardName.textContent = els.name.value || "Your Name";
+            els.cardRole.textContent = els.profession.value || "Your Profession";
+            els.cardTagline.textContent = els.tagline.value || "";
+            els.cardTagline.style.display = els.tagline.value ? "block" : "none";
+
+            els.rowPhone.style.display = 'grid';
+            els.rowEmail.style.display = 'grid';
+            els.rowOffice.style.display = 'grid';
+            els.rowWeb.style.display = 'grid';
+
+            els.cardPhone.textContent = els.phone.value || "—";
+            els.cardEmail.textContent = els.email.value || "—";
+            els.cardOffice.textContent = els.office.value || "—";
+            els.cardWeb.textContent = els.web.value || "—";
+            renderAvatar();
+
+            activeVariantId = applyTheme(activeKey, activeVariantId);
+            saveState();
+
+            renderBackQr();
+        }
+
+        [els.name, els.profession, els.tagline, els.phone, els.email, els.office, els.web].forEach(function(input) {
+            input.addEventListener('input', render);
+        });
+        render();
+
+        // ─── Accent swatches ──────────────────────────────────────────────
+        var PRESET_COLORS = ["#C1673D", "#0E5C56", "#1F8A5F", "#163A2E", "#8E1F2E", "#B8925A", "#C1443B", "#2B6CB0"];
+
+        function refreshSwatchActive() {
+            var swatches = els.swatchRow.querySelectorAll('.swatch');
+            swatches.forEach(function(sw) {
+                sw.classList.toggle('active', customAccent === sw.dataset.color);
+            });
+        }
+        var swatchAnchor = els.swatchRow.firstChild;
+        PRESET_COLORS.forEach(function(color) {
+            var sw = document.createElement('button');
+            sw.type = 'button';
+            sw.className = 'swatch';
+            sw.style.background = color;
+            sw.dataset.color = color;
+            sw.addEventListener('click', function() {
+                customAccent = color;
+                els.colorCustom.value = color;
+                refreshSwatchActive();
+                render();
+            });
+            els.swatchRow.insertBefore(sw, swatchAnchor);
+        });
+        refreshSwatchActive();
+        if (customAccent) els.colorCustom.value = customAccent;
+        els.colorCustom.addEventListener('input', function() {
+            customAccent = els.colorCustom.value;
+            refreshSwatchActive();
+            render();
+        });
+        els.colorReset.addEventListener('click', function() {
+            customAccent = null;
+            refreshSwatchActive();
+            render();
+        });
+
+        // ─── Photo upload ──────────────────────────────────────────────────
+        function removeBackgroundFromCanvas(sourceCanvas, tolerance) {
+            var w = sourceCanvas.width,
+                h = sourceCanvas.height;
+            var out = document.createElement('canvas');
+            out.width = w;
+            out.height = h;
+            var ctx = out.getContext('2d');
+            ctx.drawImage(sourceCanvas, 0, 0);
+            var imgData = ctx.getImageData(0, 0, w, h);
+            var data = imgData.data;
+
+            function sample(x, y) {
+                var i = (y * w + x) * 4;
+                return [data[i], data[i + 1], data[i + 2]];
+            }
+            var corners = [sample(0, 0), sample(w - 1, 0), sample(0, h - 1), sample(w - 1, h - 1)];
+            var bg = [0, 0, 0];
+            corners.forEach(function(c) { bg[0] += c[0] / 4;
+                bg[1] += c[1] / 4;
+                bg[2] += c[2] / 4; });
+            var threshold = tolerance * 4;
+            var visited = new Uint8Array(w * h);
+            var stack = [];
+            for (var x = 0; x < w; x++) { stack.push(x, 0);
+                stack.push(x, h - 1); }
+            for (var y = 0; y < h; y++) { stack.push(0, y);
+                stack.push(w - 1, y); }
+            while (stack.length) {
+                var py = stack.pop(),
+                    px = stack.pop();
+                if (px < 0 || py < 0 || px >= w || py >= h) continue;
+                var idx = py * w + px;
+                if (visited[idx]) continue;
+                visited[idx] = 1;
+                var i = idx * 4;
+                var dr = data[i] - bg[0],
+                    dg = data[i + 1] - bg[1],
+                    db = data[i + 2] - bg[2];
+                var dist = Math.sqrt(dr * dr + dg * dg + db * db);
+                if (dist > threshold) continue;
+                data[i + 3] = 0;
+                stack.push(px + 1, py, px - 1, py, px, py + 1, px, py - 1);
+            }
+            ctx.putImageData(imgData, 0, 0);
+            return out;
+        }
+
+        function processUpload(tolerance) {
+            if (!originalUploadCanvas) return;
+            if (els.bgRemoveToggle.checked) {
+                var result = removeBackgroundFromCanvas(originalUploadCanvas, tolerance);
+                uploadedImageDataUrl = result.toDataURL('image/png');
+            } else {
+                uploadedImageDataUrl = originalUploadCanvas.toDataURL('image/png');
+            }
+            els.uploadThumb.src = uploadedImageDataUrl;
+            render();
+        }
+        els.fileUpload.addEventListener('change', function(e) {
+            var file = e.target.files && e.target.files[0];
+            if (!file) return;
+            var reader = new FileReader();
+            reader.onload = function(ev) {
+                var img = new Image();
+                img.onload = function() {
+                    var maxDim = 640;
+                    var scale = Math.min(1, maxDim / Math.max(img.width, img.height));
+                    var w = Math.round(img.width * scale),
+                        h = Math.round(img.height * scale);
+                    var canvas = document.createElement('canvas');
+                    canvas.width = w;
+                    canvas.height = h;
+                    canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+                    originalUploadCanvas = canvas;
+                    els.uploadThumb.style.display = 'block';
+                    els.uploadClear.style.display = 'inline';
+                    els.bgRemoveRow.style.display = 'flex';
+                    els.bgRemoveRow.style.display = els.bgRemoveToggle.checked ? 'flex' : 'none';
+                    processUpload(parseInt(els.toleranceSlider.value, 10));
+                    showToast("Image uploaded" + (els.bgRemoveToggle.checked ? " (bg removed)" : ""));
+                };
+                img.onerror = function() { showToast("Couldn't load image."); };
+                img.src = ev.target.result;
+            };
+            reader.readAsDataURL(file);
+        });
+        els.bgRemoveToggle.addEventListener('change', function() {
+            processUpload(parseInt(els.toleranceSlider.value, 10));
+        });
+        els.toleranceSlider.addEventListener('input', function() {
+            processUpload(parseInt(els.toleranceSlider.value, 10));
+        });
+        els.uploadClear.addEventListener('click', function() {
+            uploadedImageDataUrl = null;
+            originalUploadCanvas = null;
+            els.fileUpload.value = '';
+            els.uploadThumb.style.display = 'none';
+            els.uploadClear.style.display = 'none';
+            els.bgRemoveRow.style.display = 'none';
+            render();
+        });
+
+        // ─── Watermark ─────────────────────────────────────────────────────
+        function escapeXml(str) {
+            return String(str).replace(/[<>&'"]/g, function(c) {
+                return { '<': '&lt;', '>': '&gt;', '&': '&amp;', "'": '&apos;', '"': '&quot;' } [c];
+            });
+        }
+
+        function updateWatermarkCount() {
+            var len = els.watermark.value.length;
+            els.watermarkCount.textContent = len + ' / 30';
+            els.watermarkCount.classList.toggle('warn', len >= 27);
+        }
+
+        function renderWatermark() {
+            var text = els.watermark.value.trim();
+            var angle = parseInt(els.wmAngle.value, 10) || 0;
+            var strength = parseInt(els.wmStrength.value, 10) || 14;
+            els.watermarkLayer.style.opacity = (strength / 100).toFixed(2);
+            if (!text) { els.watermarkLayer.innerHTML = ''; return; }
+            var safe = escapeXml(text);
+            if (watermarkMode === 'single') {
+                els.watermarkLayer.innerHTML =
+                    '<svg viewBox="0 0 300 200" preserveAspectRatio="xMidYMid meet" style="width:100%;height:100%;"><text x="150" y="105" text-anchor="middle" style="font-family:var(--c-display);font-weight:600;" font-size="28" fill="currentColor" transform="rotate(' +
+                    angle + ' 150 100)">' + safe + '</text></svg>';
+            } else {
+                els.watermarkLayer.innerHTML =
+                    '<svg viewBox="0 0 300 200" preserveAspectRatio="xMidYMid slice" style="width:100%;height:100%;"><defs><pattern id="wmpat" width="150" height="60" patternUnits="userSpaceOnUse" patternTransform="rotate(' +
+                    angle + ')"><text x="0" y="36" style="font-family:var(--c-display);font-weight:600;" font-size="15" fill="currentColor">' +
+                    safe + '</text></pattern></defs><rect x="-50" y="-50" width="400" height="300" fill="url(#wmpat)"/></svg>';
+            }
+        }
+        updateWatermarkCount();
+        els.watermark.addEventListener('input', function() { updateWatermarkCount();
+            renderWatermark();
+            saveState(); });
+        els.wmModeRow.querySelectorAll('.variant-pill').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                watermarkMode = btn.dataset.mode;
+                els.wmModeRow.querySelectorAll('.variant-pill').forEach(function(b) { b.classList.toggle('active',
+                        b === btn); });
+                renderWatermark();
+                saveState();
+            });
+        });
+        els.wmAngle.addEventListener('input', function() {
+            els.wmAngleVal.textContent = els.wmAngle.value + '°';
+            renderWatermark();
+            saveState();
+        });
+        els.wmStrength.addEventListener('input', function() {
+            els.wmStrengthVal.textContent = els.wmStrength.value + '%';
+            renderWatermark();
+            saveState();
+        });
+        els.wmAngleVal.textContent = els.wmAngle.value + '°';
+        els.wmStrengthVal.textContent = els.wmStrength.value + '%';
+        renderWatermark();
+
+        // ─── Card flip & QR ──────────────────────────────────────────────
+        function toggleFlip() {
+            els.cardFlip.classList.toggle('flipped');
+        }
+        els.cardFlip.addEventListener('click', toggleFlip);
+        els.flipHint.addEventListener('click', function(e) { e.stopPropagation();
+            toggleFlip(); });
+
+        var qrDebounce = null;
+
+        function renderBackQr() {
+            clearTimeout(qrDebounce);
+            qrDebounce = setTimeout(function() {
+                els.cardBackName.textContent = els.name.value || 'Your Name';
+                if (typeof QRCode === 'undefined') {
+                    els.cardBackQr.innerHTML =
+                        '<div style="padding:6px;background:#f5f5f5;border-radius:6px;font-size:10px;color:#999;">QR offline</div>';
+                    return;
+                }
+                var vcard = buildVCardText();
+                try {
+                    QRCode.toCanvas(vcard, { width: 100, margin: 1, color: { dark: '#14161C',
+                            light: '#FFFFFF' } }, function(err, canvas) {
+                        if (err || !canvas) {
+                            els.cardBackQr.innerHTML =
+                                '<div style="padding:6px;background:#f5f5f5;border-radius:6px;font-size:10px;color:#999;">QR error</div>';
+                            return;
+                        }
+                        els.cardBackQr.innerHTML = '';
+                        els.cardBackQr.appendChild(canvas);
+                    });
+                } catch (e) {
+                    els.cardBackQr.innerHTML =
+                        '<div style="padding:6px;background:#f5f5f5;border-radius:6px;font-size:10px;color:#999;">QR error</div>';
+                }
+            }, 300);
+        }
+        [els.name, els.profession, els.tagline, els.phone, els.email, els.office, els.web].forEach(function(input) {
+            input.addEventListener('input', renderBackQr);
+        });
+        renderBackQr();
+
+        // ─── Export ────────────────────────────────────────────────────────
+        function showToast(msg) {
+            els.toast.textContent = msg;
+            els.toast.classList.add('show');
+            clearTimeout(showToast._t);
+            showToast._t = setTimeout(function() { els.toast.classList.remove('show'); }, 5000);
+        }
+
+        function prepareCapture() {
+            els.card._prevTransition = els.card.style.transition;
+            els.card.style.transition = 'none';
+            els.inkWipe.style.opacity = '0';
+            var wasFlipped = els.cardFlip.classList.contains('flipped');
+            els.cardFlip._wasFlipped = wasFlipped;
+            els.cardFlip._prevTransition = els.cardFlip.style.transition;
+            els.cardFlip.style.transition = 'none';
+            if (wasFlipped) {
+                els.cardFlip.classList.remove('flipped');
+            }
+        }
+
+        function restoreCapture() {
+            els.card.style.transition = els.card._prevTransition || '';
+            els.inkWipe.style.opacity = '';
+            if (els.cardFlip._wasFlipped) {
+                els.cardFlip.classList.add('flipped');
+            }
+            void els.cardFlip.offsetWidth;
+            els.cardFlip.style.transition = els.cardFlip._prevTransition || '';
+        }
+
+        function renderCardToCanvas() {
+            prepareCapture();
+            return document.fonts.ready.then(function() {
+                return html2canvas(els.card, { scale: 3, backgroundColor: null, useCORS: true });
+            }).finally(restoreCapture);
+        }
+
+        function canvasToBlob(canvas) {
+            return new Promise(function(resolve) {
+                canvas.toBlob(function(blob) { resolve(blob); }, 'image/png');
+            });
+        }
+
+        function downloadBlob(blob, filename) {
+            var url = URL.createObjectURL(blob);
+            var a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            setTimeout(function() { URL.revokeObjectURL(url); }, 3000);
+        }
+
+        function fireStamp() {
+            if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || !els.stampFx) return;
+            els.stampFx.classList.remove('firing');
+            void els.stampFx.offsetWidth;
+            els.stampFx.classList.add('firing');
+        }
+
+        document.getElementById('btnSave').addEventListener('click', function() {
+            var btn = this;
+            btn.disabled = true;
+            fireStamp();
+            renderCardToCanvas().then(canvasToBlob).then(function(blob) {
+                downloadBlob(blob, (els.name.value || 'business-card').replace(/\s+/g, '-').toLowerCase() +
+                    '.png');
+                showToast("Image saved.");
+            }).catch(function() { showToast("Could not render image."); }).finally(function() { btn
+                    .disabled = false; });
+        });
+
+        document.getElementById('btnShare').addEventListener('click', function() {
+            var btn = this;
+            btn.disabled = true;
+            fireStamp();
+            renderCardToCanvas().then(canvasToBlob).then(function(blob) {
+                var filename = (els.name.value || 'business-card').replace(/\s+/g, '-').toLowerCase() +
+                    '.png';
+                var file = new File([blob], filename, { type: 'image/png' });
+                if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                    navigator.share({ files: [file], title: els.name.value, text: els.name.value + (els
+                            .profession.value ? ' — ' + els.profession.value : '') })
+                        .catch(function() { /* user cancelled */ });
+                } else {
+                    downloadBlob(blob, filename);
+                    showToast("Image downloaded – share it anywhere.");
+                }
+            }).catch(function() { showToast("Could not prepare image."); }).finally(function() { btn
+                    .disabled = false; });
+        });
+
+        document.getElementById('btnPrint').addEventListener('click', function() {
+            window.print();
+        });
+
+        function buildVCardText() {
+            var lines = [
+                "BEGIN:VCARD", "VERSION:3.0",
+                "FN:" + (els.name.value || ""),
+                "TITLE:" + (els.profession.value || ""),
+                els.phone.value ? "TEL;TYPE=CELL:" + els.phone.value : "",
+                els.email.value ? "EMAIL:" + els.email.value : "",
+                els.office.value ? "ADR;TYPE=WORK:;;" + els.office.value + ";;;;" : "",
+                els.web.value ? "URL:" + (/^https?:\/\//.test(els.web.value) ? els.web.value : "https://" + els.web
+                    .value) : "",
+                els.tagline.value ? "NOTE:" + els.tagline.value : "",
+                "END:VCARD"
+            ].filter(Boolean);
+            return lines.join("\r\n");
+        }
+        document.getElementById('btnVcard').addEventListener('click', function() {
+            var blob = new Blob([buildVCardText()], { type: 'text/vcard' });
+            downloadBlob(blob, (els.name.value || 'contact').replace(/\s+/g, '-').toLowerCase() + '.vcf');
+            showToast("Contact card downloaded.");
+        });
+
+        // ─── DICE – 3D dice with random faces ─────────────────────────────
+        function rollDice() {
+            var cube = els.diceCube;
+            cube.classList.remove('rolling');
+            void cube.offsetWidth;
+            cube.classList.add('rolling');
+
+            // Random face: each face corresponds to a rotation combo
+            var faces = [
+                { x: 0, y: 0 }, // 1
+                { x: 0, y: 180 }, // 2
+                { x: 0, y: 90 }, // 3
+                { x: 0, y: -90 }, // 4
+                { x: -90, y: 0 }, // 5
+                { x: 90, y: 0 } // 6
+            ];
+            var chosen = faces[Math.floor(Math.random() * faces.length)];
+            // Add full rotations for the rolling effect
+            var rotX = chosen.x + 360 * (2 + Math.floor(Math.random() * 3));
+            var rotY = chosen.y + 360 * (2 + Math.floor(Math.random() * 3));
+            // Randomize direction for variety
+            if (Math.random() > 0.5) rotX = -rotX;
+            if (Math.random() > 0.5) rotY = -rotY;
+            cube.style.transform = 'rotateX(' + rotX + 'deg) rotateY(' + rotY + 'deg)';
+        }
+
+        // ─── Randomize theme with dice ─────────────────────────────────────
+        els.btnRandomize.addEventListener('click', function() {
+            // Unflip the card if it's flipped
+            if (els.cardFlip.classList.contains('flipped')) {
+                els.cardFlip.classList.remove('flipped');
+            }
+
+            rollDice();
+
+            setTimeout(function() {
+                var randomKey = THEME_ORDER[Math.floor(Math.random() * THEME_ORDER.length)];
+                userOverrode = true;
+                els.style.value = randomKey;
+                var theme = THEMES[randomKey];
+                var randomVariant = theme.variants[Math.floor(Math.random() * theme.variants.length)];
+                activeVariantId = randomVariant.id;
+                render();
+                showToast("New style applied.");
+            }, 850);
+        });
+
+        // ─── Pro Modal ─────────────────────────────────────────────────────
+        function openModal() {
+            els.proModal.classList.add('active');
+        }
+
+        function closeModal() {
+            els.proModal.classList.remove('active');
+        }
+
+        els.btnUpgrade.addEventListener('click', openModal);
+        els.btnTryPro.addEventListener('click', openModal);
+        els.modalClose.addEventListener('click', closeModal);
+        els.proModal.addEventListener('click', function(e) {
+            if (e.target === els.proModal) closeModal();
+        });
+
+        // ─── Design note ────────────────────────────────────────────────────
+        // The design now feels more vibrant with:
+        // - Subtle radial gradients in the background
+        // - Hover animations on buttons and swatches
+        // - A playful 3D dice with random faces
+        // - A delightful "Coming Soon" modal with sparkles and float
+        // - Accordion keeps the form tidy
+        // - QR code now generates correctly from form data
+        console.log('Mera Parichay – where your cards tell your story.');
+    </script>
+</body>
+</html>
